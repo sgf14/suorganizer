@@ -1,6 +1,8 @@
 from django.shortcuts import (get_object_or_404, render)
 from .models import Tag
 
+# see pg 149
+
 
 def tag_list(request):
     return render(
