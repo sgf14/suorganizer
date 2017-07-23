@@ -18,9 +18,12 @@ from django.contrib import admin
 
 from organizer import urls as organizer_urls
 from blog import urls as blog_urls
+from .views import redirect_root
 
+# note diff in call between organizer and blog- just demonstrating 2 different approaches- chap 5,pg 153-5
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', redirect_root),
     url(r'^', include(organizer_urls)),
     url(r'^blog/', include(blog_urls)),
 ]
