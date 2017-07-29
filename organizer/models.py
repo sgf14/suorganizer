@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Model field reference
 # https://docs.djangoproject.com/en/1.8/ref/models/fields/
@@ -13,6 +14,10 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+    # added chap 6- links pg 182
+    def get_absolute_url(self):
+        return reverse('organizer_tag_detail', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['name']
@@ -32,6 +37,9 @@ class Startup(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('organizer_startup_detail', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['name']
