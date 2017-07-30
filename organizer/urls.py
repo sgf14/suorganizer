@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import (
-    startup_detail, startup_list, tag_list, tag_detail
+    TagCreate, startup_detail, startup_list, tag_list, tag_create, tag_detail
     )
 
 # see pg 148, this is supported by view.py, which then calls the html template file(s)
@@ -17,6 +17,10 @@ urlpatterns = [
     url(r'^tag/$',
         tag_list,
         name='organizer_tag_list'
+        ),
+    url(r'^tag/create/$',
+        TagCreate.as_view(),
+        name='organizer_tag_create'
         ),
     # see pg 130 for regex pattern
     url(r'^tag/(?P<slug>[\w\-]+)/$',
