@@ -5,6 +5,12 @@
     {% endblock %}
 
     {% block content %}
+    <h2> Blog Posts</h2>
+    <div>
+        <a href="{% url 'blog_post_create' %}">
+            Write new blog Post
+        </a>
+    </div>
     {% for post in post_list %}
         <article>
             <header>

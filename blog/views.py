@@ -1,6 +1,7 @@
-from django.shortcuts import (get_object_or_404, render)
+from django.shortcuts import (get_object_or_404, render, redirect)
 from django.views.generic import View
 from .models import Post
+from .forms import PostForm
 
 '''CBV- pg 155-160. Class based view- chap 5 introduced this form vs the function call below
 # more detail to follow in chap 16.  Advantage of class vs function is more standard HTTP
@@ -30,3 +31,27 @@ def post_detail(request, year, month, slug):
         'blog/post_detail.html',
         {'post': post}
     )
+
+
+class PostCreate(View):
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+
+    def get(self, request):
+        return render(
+            request,
+            self.template_name,
+            {'form': self.form_class()}
+        )
+
+    def post(self, request):
+        bound_form = self.form_class(request.POST)
+        if bound_form.is_valid():
+            new_post = bound_form.save()
+            return redirect(new_post)
+        else:
+            return render(
+                request,
+                self.template_name,
+                {'form': bound_form}
+            )

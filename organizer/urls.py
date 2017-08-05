@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import (
-    TagCreate, startup_detail, startup_list, tag_list, tag_create, tag_detail
+    NewsLinkCreate, StartupCreate, TagCreate, startup_detail, startup_list, tag_detail, tag_list,
     )
 
 # see pg 148, this is supported by view.py, which then calls the html template file(s)
@@ -9,6 +9,10 @@ urlpatterns = [
     url(r'^startup/$',
         startup_list,
         name='organizer_startup_list'
+        ),
+    url(r'^startup/create/$',
+        StartupCreate.as_view(),
+        name='organizer_startup_create'
         ),
     url(r'^startup/(?P<slug>[\w\-]+)/$',
         startup_detail,
@@ -27,5 +31,9 @@ urlpatterns = [
         tag_detail,
         name='organizer_tag_detail'
         ),
+    url(r'^newslink/create/$',
+        NewsLinkCreate.as_view(),
+        name='organizer_newslink_create'
+        )
 ]
 
