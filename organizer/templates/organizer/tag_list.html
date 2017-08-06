@@ -17,6 +17,11 @@
             <a href="{{ tag.get_absolute_url }}">
                 {{ tag.name|title }}
             </a>
+            <span>
+                 <a href="{{ tag.get_update_url }}">
+                     - (Edit Tag)
+                 </a>
+            </span>
         </li>
         {% empty %}
             <li><em>There are currently no Tags available</em></li>

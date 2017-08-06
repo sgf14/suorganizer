@@ -23,8 +23,20 @@ class Post(models.Model):
         )
 
     def get_absolute_url(self):
+        # note this is a django standard method- vs function w/ similar purpose below
         return reverse(
             'blog_post_detail',
+            kwargs={'year': self.pub_date.year,
+                    'month': self.pub_date.month,
+                    'slug': self.slug
+                    }
+        )
+
+    def get_update_url(self):
+        # this is a book creation for similar function as above but for updates
+        # not a standard method that django will look for - see chap 9, pg 258
+        return reverse(
+            'blog_post_update',
             kwargs={'year': self.pub_date.year,
                     'month': self.pub_date.month,
                     'slug': self.slug
