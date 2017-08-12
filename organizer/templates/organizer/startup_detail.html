@@ -12,6 +12,11 @@
                 Edit Startup
             </a>
         </span>
+        <span>
+            <a href="{{ startup.get_delete_url }}">
+                Delete Startup
+            </a>
+        </span>
         <dl>
             <dt>Date Founded</dt>
                 <dd>{{ startup.founded_date }}</dd>
@@ -48,6 +53,11 @@
                                 <span>
                                     <a href="{{ newslink.get_update_url }}">
                                          - (Edit Link)
+                                    </a>
+                                </span><br><br>
+                                <span>
+                                    <a href="{{ newslink.get_delete_url }}">
+                                         (Delete Link)
                                     </a>
                                 </span>
                             </li>

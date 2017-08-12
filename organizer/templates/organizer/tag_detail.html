@@ -10,6 +10,11 @@
         <a href="{{ tag.get_update_url }}">
             Edit Tag
         </a>
+    </span><br><br>
+    <span>
+        <a href="{{ tag.get_delete_url }}">
+            Delete Tag
+        </a>
     </span>
     {% if tag.startup_set.all %}
         <section>
