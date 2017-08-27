@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'organizer',
     'blog',
+    'contact',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,15 @@ DATABASES = {
     }
 }
 
+# Email setup w/ contact form, chap 11, pg 300- displays to console
+# for testing
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SERVER_EMAIL = 'contact@django-unleashed.com'
+DEFAULT_FROM_EMAIL = 'no-reply@django-unleashed.com'
+EMAIL_SUBJECT_PREFIX = '[Startup Organizer] '
+MANAGERS = (
+    ('Us', 'ourselves@django-unleashed.com'),
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
