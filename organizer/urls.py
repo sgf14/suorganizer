@@ -8,6 +8,10 @@ from .views import (
     )
 
 # see pg 148, this is supported by view.py, which then calls the html template file(s)
+# note: later on- 09/03/17- chap 11, pg 308 refactored this app by splitting the urls into a separate
+# url module (folder,like templates).  but I chose not to implement this in my app
+# it is realtively simple to implement if you wanted to later.  in a larger prod app
+# you would want to model this sort of url module
 urlpatterns = [
     url(r'^startup/$',
         startup_list,
