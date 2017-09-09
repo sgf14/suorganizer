@@ -4,7 +4,8 @@ from .views import (
     NewsLinkCreate, NewsLinkUpdate, NewsLinkDelete,
     StartupCreate, StartupUpdate, StartupDelete,
     TagCreate, TagUpdate, TagDelete,
-    startup_detail, startup_list, tag_detail, tag_list,
+    StartupList,
+    startup_detail, tag_detail, tag_list,  # startup_list,
     )
 
 # see pg 148, this is supported by view.py, which then calls the html template file(s)
@@ -14,7 +15,8 @@ from .views import (
 # you would want to model this sort of url module
 urlpatterns = [
     url(r'^startup/$',
-        startup_list,
+        # startup_list, # original function
+        StartupList.as_view(), # new CBV
         name='organizer_startup_list'
         ),
     url(r'^startup/create/$',

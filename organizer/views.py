@@ -1,18 +1,67 @@
 from django.shortcuts import (get_object_or_404, redirect, render)
 from django.core.urlresolvers import reverse_lazy
+from django.core.paginator import (EmptyPage, PageNotAnInteger, Paginator)
 from django.views.generic import View
 from .models import NewsLink, Startup, Tag
 from .forms import NewsLinkForm, StartupForm, TagForm
 from .utils import ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
 
-
-def startup_list(request):
+# orig startup_list function version
+'''def startup_list(request):
     # see pg 149 and 150- started with tags first in book example
     return render(
         request,
         'organizer/startup_list.html',
         {'startup_list': Startup.objects.all()}
     )
+'''
+# replaced w/ StartupList class (CBV) version in chap 14- pagination, pg 338
+class StartupList(View):
+    page_kwarg = 'page'
+    paginate_by = 5  # 5 items per page
+    template_name = 'organizer/startup_list.html'
+
+    def get(self, request):
+        startups = Startup.objects.all()
+        paginator = Paginator(
+            startups, self.paginate_by
+        )
+        page_number = request.GET.get(self.page_kwarg)
+
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            page = paginator.page(1)
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+
+        if page.has_previous():
+            prev_url = "?{pkw}={n}".format(
+                pkw=self.page_kwarg,
+                n=page.previous_page_number()
+            )
+        else:
+            prev_url = None
+
+        if page.has_next():
+            next_url = "?{pkw}={n}".format(
+                pkw=self.page_kwarg,
+                n=page.next_page_number()
+            )
+        else:
+            next_url = None
+
+        context = {
+            'is_paginated': page.has_other_pages(),
+            'next_page_url': next_url,
+            'paginator': paginator,
+            'previous_page_url': prev_url,
+            'startup_list': page}
+        return render(
+            request,
+            self.template_name,
+            context
+        )
 
 
 def startup_detail(request, slug):
@@ -59,6 +108,10 @@ def tag_create(request):
             {'form': form}
         )
 
+
+'''Note classes below vs functions above.  either can be used
+as book goes along classes (CBV- Class based Views) are more frequently used. as they are more flexible.
+'''
 
 class TagCreate(View):
     # this is option 2- Ch 9.  A class (CBV) and is the more standard practice- see pg 238-240 and 247

@@ -8,11 +8,12 @@
     <div>
         <div>
             <form
-                    <!-- note url action is one of two typical options, see tag update for alternate -->
                 action="{% url 'organizer_tag_create' %}"
                 method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
+
+                 <!-- note url action is one of two typical options, see tag update for alternate -->
                 <!-- the django .as_p method replaces this more verbose code for all the fields in the model/action
                 see pg 222
                 left code as an example.  see also book pgs 218-221 as author refines different approaches
