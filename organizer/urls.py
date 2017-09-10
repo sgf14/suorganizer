@@ -5,7 +5,8 @@ from .views import (
     StartupCreate, StartupUpdate, StartupDelete,
     TagCreate, TagUpdate, TagDelete,
     StartupList,
-    startup_detail, tag_detail, tag_list,  # startup_list,
+    TagList, TagPageList,
+    startup_detail, tag_detail, # tag_list,  startup_list,
     )
 
 # see pg 148, this is supported by view.py, which then calls the html template file(s)
@@ -14,7 +15,8 @@ from .views import (
 # it is realtively simple to implement if you wanted to later.  in a larger prod app
 # you would want to model this sort of url module
 urlpatterns = [
-    url(r'^startup/$',
+    url(r'^startup/$', # note in book, upon cbv this changed from r'^startup/$' to r'^$', pg 338, but either
+        # seems to work
         # startup_list, # original function
         StartupList.as_view(), # new CBV
         name='organizer_startup_list'
@@ -35,9 +37,13 @@ urlpatterns = [
         StartupDelete.as_view(),
         name='organizer_startup_delete'
         ),
-    url(r'^tag/$',
-        tag_list,
+    url(r'^tag/$',  # pagination, url ver 1- xx/tag/
+        TagList.as_view(),
         name='organizer_tag_list'
+        ),
+    url(r'^tag/(?P<page_number>\d+)/$',  # pagination- url ver 2- xx/tag/2/.  see pg 349 for regex pattern
+        TagPageList.as_view(),
+        name='organizer_tag_page'
         ),
     url(r'^tag/create/$',
         TagCreate.as_view(),

@@ -1,5 +1,5 @@
 from django.shortcuts import (get_object_or_404, redirect, render)
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import (reverse, reverse_lazy)
 from django.core.paginator import (EmptyPage, PageNotAnInteger, Paginator)
 from django.views.generic import View
 from .models import NewsLink, Startup, Tag
@@ -16,7 +16,18 @@ from .utils import ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
     )
 '''
 # replaced w/ StartupList class (CBV) version in chap 14- pagination, pg 338
+# this is same as TagList CBV below
+
+
 class StartupList(View):
+    ''' pagination- this CBV uses preferred method of URL query vs path
+    url query style = xx/startup/?page=2
+    url path style = xx/startup/2/
+    see chap 14 pg 332.
+    startup was built with query option and tag was built with path option to show both types
+    both methods were switched from functions to classes (CBV) views
+    '''
+
     page_kwarg = 'page'
     paginate_by = 5  # 5 items per page
     template_name = 'organizer/startup_list.html'
@@ -74,13 +85,80 @@ def startup_detail(request, slug):
         {'startup': startup}
     )
 
-
-def tag_list(request):
+# orig tag list function, see above, changed to CBV, chap 14, pg 345
+'''def tag_list(request):
     return render(
         request,
         'organizer/tag_list.html',
         {'tag_list': Tag.objects.all()}
     )
+'''
+# Pagination, chap 14: note that less preferred url version you need two methods, since app has to accept url
+# pattern xx/tag/ AND xx/tag/2/  or /3/ etc.  so there is a TagList and a TagPageList CBV, and assoc url patterns.
+
+
+class TagList(View):
+    template_name = 'organizer/tag_list.html'
+
+    def get(self, request):
+        tags = Tag.objects.all()
+
+        context = {
+            'tag_list': tags,
+        }
+        return render(
+            request,
+            self.template_name,
+            context
+        )
+
+
+class TagPageList(View):
+    paginate_by = 5
+    template_name = 'organizer/tag_list.html'
+
+    def get(self, request, page_number):
+        tags = Tag.objects.all()
+        paginator = Paginator(
+            tags,
+            self.paginate_by
+        )
+        # pagination code below is pretty similar to url query style above w/ startup
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            page = paginator.page(1)
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+
+        if page.has_previous():
+            prev_url = reverse(
+                'organizer_tag_page',
+                args=(page.previous_page_number(),)
+            )
+        else:
+            prev_url = None
+
+        if page.has_next():
+            next_url = reverse(
+                'organizer_tag_page',
+                args=(page.next_page_number(),)
+            )
+        else:
+            next_url = None
+
+        context = {
+            'is_paginated': page.has_other_pages(),
+            'next_page_url': next_url,
+            'paginator': paginator,
+            'previous_page_url': prev_url,
+            'tag_list': page,
+        }
+        return render(
+            request,
+            self.template_name,
+            context
+        )
 
 
 def tag_detail(request, slug):
@@ -112,6 +190,7 @@ def tag_create(request):
 '''Note classes below vs functions above.  either can be used
 as book goes along classes (CBV- Class based Views) are more frequently used. as they are more flexible.
 '''
+
 
 class TagCreate(View):
     # this is option 2- Ch 9.  A class (CBV) and is the more standard practice- see pg 238-240 and 247
