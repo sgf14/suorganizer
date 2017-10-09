@@ -4,9 +4,17 @@
     {{ block.super }} - Startups
     {% endblock %}
 
-    {% block content %}
+    {% block create_button %}
+        <a
+                href="{% url 'organizer_startup_create' %}"
+                class="button button-primary">
+            Create New Startup
+        </a>
+    {% endblock %}
+
+    {% block org_content %}
     <h2>Startup List</h2>
-    <div>
+    <div class="mobile">
         <a href="{% url 'organizer_startup_create' %}">
             Create New Startup
         </a>
